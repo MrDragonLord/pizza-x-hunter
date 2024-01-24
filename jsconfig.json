@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "baseUrl": "./resources/js",
+      "paths": {
+        "~/*": ["./*"],
+        "@/*": ["./*"],
+        "~~/*": ["./*"],
+        "@@/*": ["./*"]
+      }
+    },
+    "exclude": ["node_modules", "public"],
+    "extensions": [
+      ".vue"
+    ]
+  }
