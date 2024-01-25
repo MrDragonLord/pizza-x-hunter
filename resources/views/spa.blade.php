@@ -5,16 +5,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>{{ env('APP_NAME') }}</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <!-- Styles -->
-        @vite('resources/js/app.css')
+        @vite('resources/css/app.css')
     </head>
     <body>
-
+        <div id="app"></div>
         @vite('resources/js/app.js')
     </body>
 </html>
