@@ -16,11 +16,6 @@ export default [
                 component: Index,
                 name: 'index',
             },
-            {
-                path: '/login',
-                component: LoginDashboard,
-                name: 'dashboard.login',
-            },
         ],
     },
     {
@@ -38,5 +33,10 @@ export default [
                 name: 'dashboard.users',
             },
         ],
+    },
+    {
+        path: '/dashboard/login',
+        component: LoginDashboard,
+        name: 'dashboard.login',
     },
 ]

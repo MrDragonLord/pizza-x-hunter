@@ -13,7 +13,8 @@ export default defineConfig({
     resolve: {
         extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
         alias: {
-            '~': path.resolve(__dirname, './resources/js'),
+            '~': '/resources/js',
+            '@img': '/resources/img',
         },
     },
 })

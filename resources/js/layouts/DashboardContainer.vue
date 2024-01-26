@@ -1,36 +1,33 @@
 <template>
     <div class="dashboard">
         <sidemenu />
-        <div class="dashboard__content">
-            <vnavbar />
+        <div class="dashboard__content container">
             <main class="dashboard__content">
                 <router-view />
-                <v-footer />
             </main>
+            <v-footer />
         </div>
     </div>
 </template>
 <script>
-    import sidemenu from '~/components/dashboard/sidemenu'
-    import VFooter from '~/components/dashboard/v-footer'
-    import VNavbar from '~/components/dashboard/v-navbar'
-    export default {
-        components: { sidemenu, VFooter, VNavbar },
-
-    }
+import sidemenu from '~/components/dashboard/sidemenu'
+import VFooter from '~/components/dashboard/v-footer'
+export default {
+    components: { sidemenu, VFooter },
+}
 </script>
 <style>
-    .dashboard {
-        display: flex;
-        height: 100vh;
-    }
-    .dashboard__content {
-        width: 100%;
-        flex: 1 1 0%;
-        flex-direction: column;
-        overflow-y: auto;
-        height: 100%;
-    }
-
-
+.dashboard {
+    display: flex;
+    height: 100vh;
+}
+.dashboard__content {
+    display: flex;
+    width: 100%;
+    flex: 1 1 0%;
+    flex-direction: column;
+    overflow-y: auto;
+    height: 100%;
+    padding: 30px 0;
+}
 </style>

@@ -39,6 +39,10 @@ button {
     cursor: pointer;
 }
 
+ul {
+    list-style: none;
+}
+
 a {
     text-decoration: none;
     color: inherit;
@@ -62,8 +66,13 @@ a {
     border: 1px solid #e5e7eb;
 }
 
-.btn_primary {
+.btn__primary {
     background-color: #3b82f6;
+    color: #fff;
+}
+
+.btn__success {
+    background-color: #22c55e;
     color: #fff;
 }
 
@@ -96,19 +105,13 @@ h4 {
     font-weight: 400;
 }
 
-@media (min-width: 1536px) {
-    .container {
-        max-width: 1536px;
-    }
+.container {
+    margin: 0 auto;
 }
-@media (min-width: 1280px) {
+
+@media (min-width: 640px) {
     .container {
-        max-width: 1280px;
-    }
-}
-@media (min-width: 1024px) {
-    .container {
-        max-width: 1024px;
+        max-width: 640px;
     }
 }
 @media (min-width: 768px) {
@@ -116,8 +119,18 @@ h4 {
         max-width: 768px;
     }
 }
-@media (min-width: 640px) {
+@media (min-width: 1024px) {
     .container {
-        max-width: 640px;
+        max-width: 1024px;
+    }
+}
+@media (min-width: 1280px) {
+    .container {
+        max-width: 1280px;
+    }
+}
+@media (min-width: 1536px) {
+    .container {
+        max-width: 1536px;
     }
 }
