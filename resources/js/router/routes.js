@@ -3,7 +3,8 @@ const MainContainer = () => import('~/layouts/MainContainer')
 
 const Index = () => import('~/pages/index')
 const IndexDashboard = () => import('~/pages/dashboard/index')
-const LoginDashboard = () => import('~/pages/dashboard/index')
+const LoginDashboard = () => import('~/pages/dashboard/login')
+const UsersDashboard = () => import('~/pages/dashboard/crud/users')
 
 export default [
     {
@@ -15,6 +16,11 @@ export default [
                 component: Index,
                 name: 'index',
             },
+            {
+                path: '/login',
+                component: LoginDashboard,
+                name: 'dashboard.login',
+            },
         ],
     },
     {
@@ -24,12 +30,12 @@ export default [
             {
                 path: '/',
                 component: IndexDashboard,
-                name: 'dashobard',
+                name: 'dashboard',
             },
             {
-                path: '/login',
-                component: LoginDashboard,
-                name: 'login.dashboard',
+                path: 'users',
+                component: UsersDashboard,
+                name: 'dashboard.users',
             },
         ],
     },

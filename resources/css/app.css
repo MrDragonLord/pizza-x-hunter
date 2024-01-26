@@ -19,3 +19,105 @@
 body {
     font-family: Montserrat;
 }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+button,
+input,
+select {
+    outline: none;
+    border: none;
+    font-family: inherit;
+}
+
+a,
+button {
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.card {
+    border: 1px solid #e5e7eb;
+    background-color: #fff;
+    border-radius: 0.5rem;
+}
+
+.form-control {
+    background-color: #fff;
+    display: block;
+    width: 100%;
+    -webkit-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+}
+
+.btn_primary {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+.btn {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    font-size: 14px;
+}
+
+h1 {
+    font-size: 2.25rem;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 1.875rem;
+    font-weight: 400;
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+h4 {
+    font-size: 1.25rem;
+    font-weight: 400;
+}
+
+@media (min-width: 1536px) {
+    .container {
+        max-width: 1536px;
+    }
+}
+@media (min-width: 1280px) {
+    .container {
+        max-width: 1280px;
+    }
+}
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1024px;
+    }
+}
+@media (min-width: 768px) {
+    .container {
+        max-width: 768px;
+    }
+}
+@media (min-width: 640px) {
+    .container {
+        max-width: 640px;
+    }
+}

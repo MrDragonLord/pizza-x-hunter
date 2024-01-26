@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/{vue}', [WebController::class, 'layout'])->where('vue', '.*');
+Route::fallback([WebController::class, 'layout']);
