@@ -2,8 +2,14 @@
     <header>
         <h2>{{ title }}</h2>
         <div class="crud__actions">
-            <button class="btn btn__primary" v-if="create">Создать</button>
-            <button class="btn btn__success" v-if="exportToExcel">
+            <button @click="create" class="btn btn__primary" v-if="create">
+                Создать
+            </button>
+            <button
+                @click="exportToExcel"
+                class="btn btn__success"
+                v-if="exportToExcel"
+            >
                 Экспорт в Excel
             </button>
         </div>
