@@ -8,8 +8,9 @@
             :deleteFunction="deleteItem"
         />
         <DataTable :value="users">
-            <Column field="name" header="ФИО сотрудников" />
-            <Column field="email" header="Email" />
+            <Column field="firstName" header="Фамилия" />
+            <Column field="lastName" header="Имя" />
+            <Column field="phone" header="Телефон" />
             <Column field="role" header="Должность" />
         </DataTable>
         <modal :show="showCreate">
@@ -33,13 +34,35 @@
             </div>
             <div class="modal-body">
                 <div class="form-input">
-                    <h5>Название страницы</h5>
+                    <h5>Фамилия</h5>
                     <input class="mt-1 form-control" placeholder="Название" />
                     <span class="form-error">Типо ошибка</span>
                 </div>
                 <div class="form-input">
-                    <h5>Название страницы</h5>
+                    <h5>Имя</h5>
                     <input class="mt-1 form-control" placeholder="Название" />
+                    <span class="form-error">Типо ошибка</span>
+                </div>
+                <div class="form-input">
+                    <h5>Телефон</h5>
+                    <input class="mt-1 form-control" placeholder="Название" />
+                    <span class="form-error">Типо ошибка</span>
+                </div>
+                <div class="form-input">
+                    <h5>Должность</h5>
+                    <select class="mt-1 form-control" name="" id="">
+                        <option value="">Администратор</option>
+                        <option value="">Менеджер</option>
+                    </select>
+                    <span class="form-error">Типо ошибка</span>
+                </div>
+                <div class="form-input">
+                    <h5>Пароль</h5>
+                    <input
+                        type="password"
+                        class="mt-1 form-control"
+                        placeholder="Название"
+                    />
                     <span class="form-error">Типо ошибка</span>
                 </div>
             </div>
@@ -73,20 +96,23 @@ export default {
         const users = ref([
             {
                 id: 1,
-                name: 'Озорнин Михаил',
-                email: 'ozornim@gmail.com',
+                firstName: 'Озорнин',
+                lastName: 'Михаил',
+                phone: '+79058606069',
                 role: 'Администратор',
             },
             {
                 id: 2,
-                name: 'Озорнин Михаил2',
-                email: 'ozornim@gmail.com',
+                firstName: 'Озорнин',
+                lastName: 'Михаил',
+                phone: '+79058606069',
                 role: 'Администратор',
             },
             {
                 id: 3,
-                name: 'Озорнин Михаил3',
-                email: 'ozornim@gmail.com',
+                firstName: 'Озорнин',
+                lastName: 'Михаил',
+                phone: '+79058606069',
                 role: 'Администратор',
             },
         ])
@@ -124,5 +150,6 @@ export default {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     font-size: 12px;
+    margin-top: 10px;
 }
 </style>

@@ -18,25 +18,25 @@
             </li>
             <li class="aside__link">
                 <span
+                    v-if="$route.name == 'dashboard.position'"
+                    class="aside__link_active"
+                />
+                <router-link
+                    to="/dashboard/position"
+                    exact-active-class="active__link"
+                    >Позиции</router-link
+                >
+            </li>
+            <li class="aside__link">
+                <span
                     v-if="$route.name == 'dashboard.orders'"
                     class="aside__link_active"
                 />
                 <router-link
                     to="/dashboard/orders"
                     exact-active-class="active__link"
-                    >Заказы</router-link
                 >
-            </li>
-            <li class="aside__link">
-                <span
-                    v-if="$route.name == 'dashboard.promos'"
-                    class="aside__link_active"
-                />
-                <router-link
-                    to="/dashboard/promos"
-                    exact-active-class="active__link"
-                >
-                    Акции</router-link
+                    Заказы</router-link
                 >
             </li>
         </ul>
