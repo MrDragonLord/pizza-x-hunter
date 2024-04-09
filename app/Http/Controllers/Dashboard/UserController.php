@@ -49,14 +49,14 @@ class UserController extends Controller implements CRUDInterface
         $user->delete();
     }
 
-    public function validation(Request $request)
+    public function Validation(Request $request)
     {
         $this->validate($request, [
             'name' => 'required|min:3',
             'phone' => 'required|unique:users,phone',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|password_confirmed',
-            'role_id' => 'required|integer'
+            'email' => 'email|unique:users,email',
+            'password' => 'required|min:3',
+            'role_id' => 'required|integer|min:1'
         ]);
     }
 }

@@ -2,16 +2,15 @@
     <div>
         <CrudHeader
             title="Сотрудники"
-            :create="create"
+            :create="openModel"
             :exportToExcel="exportToExcel"
             :editFunction="edit"
             :deleteFunction="deleteItem"
         />
         <DataTable :value="users">
-            <Column field="firstName" header="Фамилия" />
-            <Column field="lastName" header="Имя" />
+            <Column field="name" header="Фамилия Имя" />
             <Column field="phone" header="Телефон" />
-            <Column field="role" header="Должность" />
+            <Column field="role_name" header="Должность" />
         </DataTable>
         <modal :show="showCreate">
             <div class="modal-header">
@@ -34,27 +33,62 @@
             </div>
             <div class="modal-body">
                 <div class="form-input">
-                    <h5>Фамилия</h5>
-                    <input class="mt-1 form-control" placeholder="Название" />
-                    <span class="form-error">Типо ошибка</span>
+                    <h5>Фамилия Имя</h5>
+                    <input
+                        class="mt-1 form-control"
+                        placeholder="Фамилия Имя"
+                        v-model="form.name"
+                    />
+                    <span
+                        class="form-error"
+                        v-if="errorsForm.hasOwnProperty('name')"
+                        >{{ errorsForm.name[0] }}</span
+                    >
                 </div>
                 <div class="form-input">
-                    <h5>Имя</h5>
-                    <input class="mt-1 form-control" placeholder="Название" />
-                    <span class="form-error">Типо ошибка</span>
+                    <h5>Email</h5>
+                    <input
+                        type="email"
+                        class="mt-1 form-control"
+                        placeholder="Email"
+                        v-model="form.email"
+                    />
+                    <span
+                        class="form-error"
+                        v-if="errorsForm.hasOwnProperty('email')"
+                        >{{ errorsForm.email[0] }}</span
+                    >
                 </div>
                 <div class="form-input">
                     <h5>Телефон</h5>
-                    <input class="mt-1 form-control" placeholder="Название" />
-                    <span class="form-error">Типо ошибка</span>
+                    <input
+                        class="mt-1 form-control"
+                        placeholder="Название"
+                        v-model="form.phone"
+                    />
+                    <span
+                        class="form-error"
+                        v-if="errorsForm.hasOwnProperty('phone')"
+                        >{{ errorsForm.phone[0] }}</span
+                    >
                 </div>
                 <div class="form-input">
                     <h5>Должность</h5>
-                    <select class="mt-1 form-control" name="" id="">
-                        <option value="">Администратор</option>
-                        <option value="">Менеджер</option>
+                    <select class="mt-1 form-control" v-model="form.role_id">
+                        <option value="0" selected>Выберите роль</option>
+                        <option
+                            :value="role.id"
+                            v-for="role in roles"
+                            :key="role.id"
+                        >
+                            {{ role.name }}
+                        </option>
                     </select>
-                    <span class="form-error">Типо ошибка</span>
+                    <span
+                        class="form-error"
+                        v-if="errorsForm.hasOwnProperty('role_id')"
+                        >{{ errorsForm.role_id[0] }}</span
+                    >
                 </div>
                 <div class="form-input">
                     <h5>Пароль</h5>
@@ -62,12 +96,20 @@
                         type="password"
                         class="mt-1 form-control"
                         placeholder="Название"
+                        v-model="form.password"
                     />
-                    <span class="form-error">Типо ошибка</span>
+                    <span
+                        class="form-error"
+                        v-if="errorsForm.hasOwnProperty('password')"
+                        >{{ errorsForm.password[0] }}</span
+                    >
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn__primary btn__create">
+                <button
+                    @click="createUser"
+                    class="btn btn__primary btn__create"
+                >
                     Добавить нового сотрудника
                 </button>
             </div>
@@ -79,77 +121,71 @@
 import DataTable from '~/components/dashboard/crud/DataTable.vue'
 import CrudHeader from '~/components/dashboard/crud/Header'
 import Modal from '~/components/Modal.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import api from '~/api'
 
 export default {
     components: { CrudHeader, DataTable, Modal },
     setup() {
+        const users = ref([])
+        const roles = ref([])
+        const form = ref({
+            name: '',
+            email: '',
+            phone: '',
+            role_id: 0,
+            password: '',
+        })
+        const errorsForm = ref([])
         const showCreate = ref(false)
         const showEdit = ref(false)
 
         const exportToExcel = () => {}
 
-        const create = () => {
+        const openModel = () => {
             showCreate.value = !showCreate.value
         }
-
-        const users = ref([
-            {
-                id: 1,
-                firstName: 'Озорнин',
-                lastName: 'Михаил',
-                phone: '+79058606069',
-                role: 'Администратор',
-            },
-            {
-                id: 2,
-                firstName: 'Озорнин',
-                lastName: 'Михаил',
-                phone: '+79058606069',
-                role: 'Администратор',
-            },
-            {
-                id: 3,
-                firstName: 'Озорнин',
-                lastName: 'Михаил',
-                phone: '+79058606069',
-                role: 'Администратор',
-            },
-        ])
 
         const edit = item => {}
 
         const deleteItem = item => {}
 
+        const fetchUsers = async () => {
+            try {
+                const { data } = await api.get('/dashboard/users/render')
+                users.value = data.users.data
+                roles.value = data.roles
+            } catch (error) {}
+        }
+
+        const createUser = async () => {
+            try {
+                await api.post('/dashboard/users/create', form.value)
+                await fetchUsers()
+                openModel()
+                form.value = []
+            } catch ({ response }) {
+                errorsForm.value = response.data.errors
+            }
+        }
+
+        onMounted(async () => {
+            await fetchUsers()
+        })
+
         return {
             exportToExcel,
-            create,
+            openModel,
             edit,
             deleteItem,
             users,
             showCreate,
             showEdit,
+            form,
+            createUser,
+            roles,
+            errorsForm,
         }
     },
 }
 </script>
-<style>
-.modal-body {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.form-input {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-.btn__create {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    font-size: 12px;
-    margin-top: 10px;
-}
-</style>

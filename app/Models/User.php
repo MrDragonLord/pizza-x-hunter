@@ -20,6 +20,8 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'role_id',
+        'phone',
     ];
 
     /**
@@ -40,7 +42,31 @@ class User extends Authenticatable implements JWTSubject
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'role' => 'object'
     ];
+
+    protected $appends = [
+        'role',
+        'role_name'
+    ];
+
+    public function getRoleAttribute()
+    {
+        $role = Roles::where('id', $this->role_id)->first();
+
+        return $role;
+    }
+
+    public function getRoleNameAttribute()
+    {
+        $role = Roles::where('id', $this->role_id)->first();
+
+        if (isset($role->name)) {
+            return $role->name;
+        } else {
+            return 'Не сотрудник';
+        }
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

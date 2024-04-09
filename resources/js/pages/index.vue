@@ -1,10 +1,8 @@
 <template>
     <div>
-123
+        <router-link to="/dashboard/login">Авторизация</router-link>
     </div>
 </template>
 <script>
-export default {
-
-}
+export default {}
 </script>

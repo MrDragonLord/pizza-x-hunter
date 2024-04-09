@@ -19,5 +19,5 @@ interface CRUDInterface
     public function delete($id);
 
     //validation model
-    protected function validation(Request $request);
+    public function Validation(Request $request);
 }
