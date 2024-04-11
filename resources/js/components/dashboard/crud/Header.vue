@@ -2,25 +2,30 @@
     <header>
         <h2>{{ title }}</h2>
         <div class="crud__actions">
-            <button @click="create" class="btn btn__primary" v-if="create">
+            <button
+                @click="emit('create')"
+                class="btn btn__primary"
+                v-if="showCreate"
+            >
                 Создать
             </button>
             <button
-                @click="exportToExcel"
+                @click="emit('exportToExcel')"
                 class="btn btn__success"
-                v-if="exportToExcel"
+                v-if="showExportExcel"
             >
                 Экспорт в Excel
             </button>
         </div>
     </header>
 </template>
-<script>
-export default {
-    name: 'crud-header',
-    props: ['title', 'create', 'exportToExcel'],
-    setup() {},
-}
+<script setup>
+defineProps({
+    title: String,
+    showCreate: Boolean,
+    showExportExcel: Boolean,
+})
+const emit = defineEmits(['create', 'exportToExcel'])
 </script>
 <style>
 header {

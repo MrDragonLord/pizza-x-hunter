@@ -1,5 +1,5 @@
 <template>
-    <div></div>
+    <div>впа</div>
 </template>
 <script>
 export default {}

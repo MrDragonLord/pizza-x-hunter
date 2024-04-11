@@ -1,9 +1,22 @@
+import { useUserStore } from '~/store/user';
 <template>
     <aside>
         <router-link to="dashboard" class="dashboard__logo aside__link">
             Pizza x Hunter
         </router-link>
         <ul class="aside__links">
+            <li class="aside__link">
+                <span
+                    v-if="$route.name === 'dashboard'"
+                    class="aside__link_active"
+                />
+                <router-link
+                    to="/dashboard/home"
+                    exact-active-class="active__link"
+                >
+                    Панель управления
+                </router-link>
+            </li>
             <li class="aside__link">
                 <span
                     v-if="$route.name == 'dashboard.users'"
@@ -41,18 +54,26 @@
             </li>
         </ul>
         <div class="aside__profile">
-            <img src="@img/f1h46coA7Vg.jpg" alt="" />
             <div class="aside__name">
-                <h3 class="aside__name">Михаил Озорнин</h3>
+                <h3 class="aside__name">{{ user.name }}</h3>
             </div>
         </div>
         <div class="aside__logout">
-            <router-link to="/dashboard">Выйти</router-link>
+            <a @click="logOutUser" class="link__router">Выйти</a>
         </div>
     </aside>
 </template>
-<script>
-export default {}
+<script setup>
+import { useRouter } from 'vue-router'
+import { useUserStore } from '~/store/user'
+
+const { user, logOut } = useUserStore()
+const router = useRouter()
+
+const logOutUser = async () => {
+    await logOut()
+    router.push({ name: 'dashboard.login' })
+}
 </script>
 <style>
 aside {

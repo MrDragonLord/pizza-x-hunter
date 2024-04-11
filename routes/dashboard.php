@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [LoginController::class, 'Login']);
 
 
-Route::group(['prefix' => 'users'], function () {
-    Route::get('render', [UserController::class, 'render']);
-    Route::post('create', [UserController::class, 'create']);
-    Route::post('update/{id}', [UserController::class, 'update']);
-    Route::delete('delete/{id}', [UserController::class, 'delete']);
+Route::middleware(['auth:api'])->group(function () {
+    Route::group(['prefix' => 'users'], function () {
+        Route::get('render', [UserController::class, 'render']);
+        Route::post('create', [UserController::class, 'create']);
+        Route::post('update/{id}', [UserController::class, 'update']);
+        Route::delete('delete/{id}', [UserController::class, 'delete']);
+    });
 });

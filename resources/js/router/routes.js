@@ -21,9 +21,12 @@ export default [
     {
         path: '/dashboard',
         component: DashboardContainer,
+        meta: {
+            auth: true,
+        },
         children: [
             {
-                path: '/',
+                path: 'home',
                 component: IndexDashboard,
                 name: 'dashboard',
             },

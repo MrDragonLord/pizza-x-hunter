@@ -11,26 +11,31 @@ export const useUserStore = defineStore('user', {
     actions: {
         saveToken(token) {
             this.token = token
-            window.axios.defaults.headers.common['Authorization'] =
-                'Bearer ' + token
+            api.defaults.headers.common['Authorization'] = 'Bearer ' + token
 
             localStorage.setItem('api-token', token)
         },
         async fetchUser() {
+            // if (state.loading) {
+            //     return;
+            // }
             try {
-                const { data } = await api.get('/user')
-
+                const { data } = await api.get('user')
                 this.user = data
-            } catch (e) {
-                //this.logOut()
+            } catch (error) {
+                this.logOut()
+
+                throw error
             }
         },
+
         async logOut() {
             try {
                 await api.post('/logout')
             } catch (e) {}
 
             localStorage.removeItem('api-token')
+            window.axios.defaults.headers.common['Authorization'] = ''
         },
     },
 })

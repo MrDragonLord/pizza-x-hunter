@@ -2,20 +2,24 @@
     <div>
         <CrudHeader
             title="Сотрудники"
-            :create="openModel"
-            :exportToExcel="exportToExcel"
-            :editFunction="edit"
-            :deleteFunction="deleteItem"
+            :showCreate="true"
+            :showExportExcel="false"
+            @create="openModal"
+            @exportToExcel="exportToExcel"
         />
-        <DataTable :value="users">
+        <DataTable
+            :value="users"
+            @editFunction="editItem"
+            @deleteFunction="deleteItem"
+        >
             <Column field="name" header="Фамилия Имя" />
             <Column field="phone" header="Телефон" />
             <Column field="role_name" header="Должность" />
         </DataTable>
-        <modal :show="showCreate">
+        <modal :show="showModal">
             <div class="modal-header">
                 <h3>Новый сотрудник</h3>
-                <button @click="showCreate = !showCreate">
+                <button @click="showModal = !showModal">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -75,7 +79,7 @@
                 <div class="form-input">
                     <h5>Должность</h5>
                     <select class="mt-1 form-control" v-model="form.role_id">
-                        <option value="0" selected>Выберите роль</option>
+                        <option value="0" selected>Без должности</option>
                         <option
                             :value="role.id"
                             v-for="role in roles"
@@ -95,7 +99,7 @@
                     <input
                         type="password"
                         class="mt-1 form-control"
-                        placeholder="Название"
+                        placeholder="Пароль"
                         v-model="form.password"
                     />
                     <span
@@ -114,78 +118,61 @@
                 </button>
             </div>
         </modal>
-        <modal :show="showEdit"> </modal>
     </div>
 </template>
-<script>
+<script setup>
 import DataTable from '~/components/dashboard/crud/DataTable.vue'
 import CrudHeader from '~/components/dashboard/crud/Header'
 import Modal from '~/components/Modal.vue'
 import { ref, onMounted } from 'vue'
 import api from '~/api'
 
-export default {
-    components: { CrudHeader, DataTable, Modal },
-    setup() {
-        const users = ref([])
-        const roles = ref([])
-        const form = ref({
-            name: '',
-            email: '',
-            phone: '',
-            role_id: 0,
-            password: '',
-        })
-        const errorsForm = ref([])
-        const showCreate = ref(false)
-        const showEdit = ref(false)
+const users = ref([])
+const roles = ref([])
+const form = ref({
+    name: '',
+    email: '',
+    phone: '',
+    role_id: 0,
+    password: '',
+})
+const errorsForm = ref([])
+const showModal = ref(false)
 
-        const exportToExcel = () => {}
+const exportToExcel = () => {}
 
-        const openModel = () => {
-            showCreate.value = !showCreate.value
-        }
-
-        const edit = item => {}
-
-        const deleteItem = item => {}
-
-        const fetchUsers = async () => {
-            try {
-                const { data } = await api.get('/dashboard/users/render')
-                users.value = data.users.data
-                roles.value = data.roles
-            } catch (error) {}
-        }
-
-        const createUser = async () => {
-            try {
-                await api.post('/dashboard/users/create', form.value)
-                await fetchUsers()
-                openModel()
-                form.value = []
-            } catch ({ response }) {
-                errorsForm.value = response.data.errors
-            }
-        }
-
-        onMounted(async () => {
-            await fetchUsers()
-        })
-
-        return {
-            exportToExcel,
-            openModel,
-            edit,
-            deleteItem,
-            users,
-            showCreate,
-            showEdit,
-            form,
-            createUser,
-            roles,
-            errorsForm,
-        }
-    },
+const openModal = () => {
+    showModal.value = !showModal.value
 }
+
+const editItem = item => {
+    openModal()
+
+    form.value = item
+}
+
+const deleteItem = item => {}
+
+const fetchUsers = async () => {
+    try {
+        const { data } = await api.get('/dashboard/users/render')
+        users.value = data.users.data
+        roles.value = data.roles
+    } catch (error) {}
+}
+
+const createUser = async () => {
+    try {
+        await api.post('/dashboard/users/create', form.value)
+        await fetchUsers()
+        openModal()
+        form.value = {}
+    } catch ({ response }) {
+        errorsForm.value = response.data.errors
+    }
+}
+
+onMounted(async () => {
+    await fetchUsers()
+})
 </script>

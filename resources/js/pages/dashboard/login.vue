@@ -50,7 +50,7 @@ const login = async () => {
         userStore.saveToken(data.token)
         await userStore.fetchUser()
 
-        router.push('/dashboard')
+        router.push('/dashboard/home')
     } catch ({ response }) {
         errorsForm.value = response.data.errors
     }

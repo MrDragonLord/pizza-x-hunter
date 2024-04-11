@@ -56,7 +56,7 @@ class UserController extends Controller implements CRUDInterface
             'phone' => 'required|unique:users,phone',
             'email' => 'email|unique:users,email',
             'password' => 'required|min:3',
-            'role_id' => 'required|integer|min:1'
+            'role_id' => 'required|integer'
         ]);
     }
 }

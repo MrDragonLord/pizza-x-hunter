@@ -74,7 +74,7 @@ class LoginController extends Controller
         return true;
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         $this->guard()->logout();
     }

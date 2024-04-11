@@ -13,7 +13,7 @@
             <div class="table-row" v-for="item in value" :key="item.id">
                 <div
                     class="table-cell"
-                    v-for="column in columns"
+                    v-for="column in state.columns"
                     :key="column.props.field"
                 >
                     {{ item[column.props.field] }}
@@ -55,51 +55,38 @@
     </div>
 </template>
 
-<script>
-import { defineComponent, onMounted, reactive, toRefs } from 'vue'
+<script setup>
+import { onMounted, reactive, toRaw, toRefs, useSlots } from 'vue'
 import Column from './Column'
 
-export default defineComponent({
-    components: {
-        Column,
-    },
-    props: {
-        value: Array,
-        editFunction: Function,
-        deleteFunction: Function,
-        tableStyle: {
-            type: String,
-            default: '',
-        },
-    },
-    setup(_, { slots }) {
-        const state = reactive({
-            columns: [],
-        })
+const slots = useSlots()
 
-        onMounted(() => {
-            if (slots.default) {
-                state.columns = slots
-                    .default()
-                    .filter(child => child.type === 'Column')
-            }
-        })
-
-        const editItem = item => {
-            if (typeof props.editFunction === 'function') {
-                props.editFunction(item)
-            }
-        }
-
-        const deleteItem = item => {
-            if (typeof props.deleteFunction === 'function') {
-                props.deleteFunction(item)
-            }
-        }
-
-        return { ...toRefs(state), editItem, deleteItem }
+const props = defineProps({
+    value: Array,
+    tableStyle: {
+        type: String,
+        default: '',
     },
 })
+const emit = defineEmits(['editFunction', 'deleteFunction'])
+
+const state = reactive({
+    columns: [],
+})
+
+onMounted(() => {
+    if (slots.default) {
+        state.columns = slots.default().filter(child => child.type === 'Column')
+    }
+})
+
+const editItem = item => {
+    emit('editFunction', toRaw(item))
+}
+
+const deleteItem = item => {
+    emit('deleteFunction', toRaw(item))
+}
 </script>
 
 <style>
