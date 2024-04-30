@@ -20,4 +20,6 @@ interface CRUDInterface
 
     //validation model
     public function Validation(Request $request);
+
+    public function ExportExcel(Request $request);
 }

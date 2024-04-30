@@ -1,7 +1,7 @@
 <template>
     <div>
         <CrudHeader
-            title="Сотрудники"
+            title="Позиции"
             :showCreate="true"
             :showExportExcel="false"
             @create="openModal"
@@ -13,19 +13,16 @@
             @deleteFunction="deleteItem"
             v-if="!loading"
         >
-            <Column field="name" header="Фамилия Имя" />
-            <Column field="phone" header="Телефон" />
-            <Column field="role_name" header="Должность" />
+            <Column field="name" header="Название" />
+            <Column field="price" header="Цена" />
+            <Column field="weight" header="Вес" />
+            <Column field="discount" header="Скидка" />
         </DataTable>
         <Loader v-else />
         <modal :show="showModal" @close="openModal">
             <div class="modal-header">
                 <h3>
-                    {{
-                        editMode
-                            ? 'Обновление сотрудника'
-                            : 'Создать сотрудника'
-                    }}
+                    {{ editMode ? 'Обновление позиции' : 'Создать позицию' }}
                 </h3>
                 <button @click="showModal = !showModal">
                     <svg
@@ -45,10 +42,11 @@
             </div>
             <div class="modal-body">
                 <div class="form-input">
-                    <h5>Фамилия Имя</h5>
+                    <h5>Название</h5>
                     <input
+                        type="text"
                         class="mt-1 form-control"
-                        placeholder="Фамилия Имя"
+                        placeholder="Название"
                         v-model="form.name"
                     />
                     <span
@@ -58,75 +56,68 @@
                     >
                 </div>
                 <div class="form-input">
-                    <h5>Email</h5>
-                    <input
-                        type="email"
+                    <h5>Описание</h5>
+                    <textarea
                         class="mt-1 form-control"
-                        placeholder="Email"
-                        v-model="form.email"
+                        placeholder="Описание"
+                        v-model="form.description"
                     />
                     <span
                         class="form-error"
-                        v-if="errorsForm.hasOwnProperty('email')"
-                        >{{ errorsForm.email[0] }}</span
+                        v-if="errorsForm.hasOwnProperty('description')"
+                        >{{ errorsForm.description[0] }}</span
                     >
                 </div>
                 <div class="form-input">
-                    <h5>Телефон</h5>
+                    <h5>Цена</h5>
                     <input
+                        type="number"
                         class="mt-1 form-control"
-                        placeholder="Название"
-                        v-model="form.phone"
+                        placeholder="Цена"
+                        v-model.number="form.price"
                     />
                     <span
                         class="form-error"
-                        v-if="errorsForm.hasOwnProperty('phone')"
-                        >{{ errorsForm.phone[0] }}</span
+                        v-if="errorsForm.hasOwnProperty('price')"
+                        >{{ errorsForm.price[0] }}</span
                     >
                 </div>
                 <div class="form-input">
-                    <h5>Должность</h5>
-                    <select class="mt-1 form-control" v-model="form.role_id">
-                        <option
-                            :value="role.id"
-                            v-for="role in (index, roles)"
-                            :key="role.id"
-                        >
-                            {{ role.name }}
-                        </option>
-                    </select>
-                    <span
-                        class="form-error"
-                        v-if="errorsForm.hasOwnProperty('role_id')"
-                        >{{ errorsForm.role_id[0] }}</span
-                    >
-                </div>
-                <div class="form-input">
-                    <h5>Пароль</h5>
+                    <h5>Вес</h5>
                     <input
-                        type="password"
+                        type="weight"
                         class="mt-1 form-control"
-                        placeholder="Пароль"
-                        v-model="form.password"
+                        placeholder="Вес"
+                        v-model.number="form.weight"
                     />
                     <span
                         class="form-error"
-                        v-if="errorsForm.hasOwnProperty('password')"
-                        >{{ errorsForm.password[0] }}</span
+                        v-if="errorsForm.hasOwnProperty('weight')"
+                        >{{ errorsForm.weight[0] }}</span
+                    >
+                </div>
+                <div class="form-input">
+                    <h5>Скидка</h5>
+                    <input
+                        type="weight"
+                        class="mt-1 form-control"
+                        placeholder="Скидка"
+                        v-model.number="form.discount"
+                    />
+                    <span
+                        class="form-error"
+                        v-if="errorsForm.hasOwnProperty('discount')"
+                        >{{ errorsForm.discount[0] }}</span
                     >
                 </div>
             </div>
             <div class="modal-footer">
                 <Button
-                    @click="() => (editMode ? editUser() : createUser())"
+                    @click="() => (editMode ? editItemClick() : createItem())"
                     class="btn btn__primary btn__create"
                     :busy="busy"
                 >
-                    {{
-                        editMode
-                            ? 'Обновить сотрудника'
-                            : 'Добавить нового сотрудника'
-                    }}
+                    {{ editMode ? 'Обновить позицию' : 'Добавить позицию' }}
                 </Button>
             </div>
         </modal>
@@ -136,7 +127,6 @@
 import { ref, onMounted, watch } from 'vue'
 import api from '~/api'
 
-import { useUserStore } from '~/store/user'
 import DataTable from '~/components/dashboard/crud/DataTable'
 import Column from '~/components/dashboard/crud/Column'
 import CrudHeader from '~/components/dashboard/crud/Header'
@@ -148,13 +138,12 @@ import Swal from 'sweetalert2'
 import { useRoute } from 'vue-router'
 
 const items = ref([])
-const roles = ref([])
 const form = ref({
     name: '',
-    email: '',
-    phone: '',
-    role_id: 1,
-    password: '',
+    description: '',
+    price: 0,
+    weight: 0,
+    discount: 0,
 })
 const errorsForm = ref([])
 
@@ -163,9 +152,7 @@ const loading = ref(true)
 const showModal = ref(false)
 const editMode = ref(false)
 
-const linkPrefix = 'users'
-
-const userStore = useUserStore()
+const linkPrefix = 'orders'
 const router = useRoute()
 
 const currentPage = ref(+router.params.page || 1)
@@ -188,10 +175,6 @@ const editItem = item => {
 }
 
 const deleteItem = item => {
-    if (userStore.user.id == item.id) {
-        Swal.fire('Вы не можете удалить самого себя!', '', 'error')
-        return
-    }
     Swal.fire({
         title: 'Вы уверены, что хотите удалить?',
         showCancelButton: true,
@@ -215,12 +198,11 @@ const fetchItems = async () => {
         )
         data.value = data
         items.value = data.items
-        roles.value = data.roles
         loading.value = false
     } catch (error) {}
 }
 
-const createUser = async () => {
+const createItem = async () => {
     busy.value = true
     try {
         await api.post(`/dashboard/${linkPrefix}/create`, form.value)
@@ -233,7 +215,7 @@ const createUser = async () => {
     }
 }
 
-const editUser = async () => {
+const editItemClick = async () => {
     busy.value = true
     try {
         await api.post(

@@ -5,6 +5,8 @@ const Index = () => import('~/pages/index')
 const IndexDashboard = () => import('~/pages/dashboard/index')
 const LoginDashboard = () => import('~/pages/dashboard/login')
 const UsersDashboard = () => import('~/pages/dashboard/crud/users')
+const PositionsDashboard = () => import('~/pages/dashboard/crud/positions')
+const OrdersDashboard = () => import('~/pages/dashboard/crud/orders')
 
 export default [
     {
@@ -34,6 +36,16 @@ export default [
                 path: 'users/:page?',
                 component: UsersDashboard,
                 name: 'dashboard.users',
+            },
+            {
+                path: 'positions/:page?',
+                component: PositionsDashboard,
+                name: 'dashboard.positions',
+            },
+            {
+                path: 'orders/:page?',
+                component: OrdersDashboard,
+                name: 'dashboard.orders',
             },
         ],
     },

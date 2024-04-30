@@ -80,4 +80,9 @@ class UserController extends Controller implements CRUDInterface
             'role_id' => 'required|integer'
         ]);
     }
+
+    public function ExportExcel(Request $request)
+    {
+
+    }
 }

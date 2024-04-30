@@ -31,11 +31,11 @@ import { useUserStore } from '~/store/user';
             </li>
             <li class="aside__link">
                 <span
-                    v-if="$route.name == 'dashboard.position'"
+                    v-if="$route.name == 'dashboard.positions'"
                     class="aside__link_active"
                 />
                 <router-link
-                    to="/dashboard/position"
+                    to="/dashboard/positions"
                     exact-active-class="active__link"
                     >Позиции</router-link
                 >

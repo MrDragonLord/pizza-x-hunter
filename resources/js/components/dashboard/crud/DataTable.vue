@@ -9,7 +9,10 @@
             <Column header="Действия" />
         </div>
         <div class="table-body">
-            <div class="table-row" v-for="item in value" :key="item.id">
+            <div v-if="value.length === 0" class="empty-message">
+                Ничего не найдено
+            </div>
+            <div class="table-row" v-for="item in value" :key="item.id" v-else>
                 <div
                     class="table-cell"
                     v-for="column in state.columns"
@@ -88,7 +91,7 @@ const deleteItem = item => {
 }
 </script>
 
-<style>
+<style scoped>
 .data-table {
     display: flex;
     flex-direction: column;
@@ -135,5 +138,11 @@ const deleteItem = item => {
 .delete svg {
     width: 1.25rem;
     height: 1.25rem;
+}
+
+.empty-message {
+    padding: 20px;
+    text-align: center;
+    color: #64748b;
 }
 </style>

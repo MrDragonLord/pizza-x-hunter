@@ -28,10 +28,12 @@ body {
 
 button,
 input,
-select {
+select,
+textarea {
     outline: none;
     border: none;
     font-family: inherit;
+    resize: vertical;
 }
 
 a,
