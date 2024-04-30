@@ -88,9 +88,10 @@
                     <h5>Должность</h5>
                     <select class="mt-1 form-control" v-model="form.role_id">
                         <option
-                            :value="role.id"
                             v-for="role in (index, roles)"
+                            :value="role.id"
                             :key="role.id"
+                            :selected="form.role_id === role.id"
                         >
                             {{ role.name }}
                         </option>
@@ -153,7 +154,7 @@ const form = ref({
     name: '',
     email: '',
     phone: '',
-    role_id: 1,
+    role_id: 0,
     password: '',
 })
 const errorsForm = ref([])

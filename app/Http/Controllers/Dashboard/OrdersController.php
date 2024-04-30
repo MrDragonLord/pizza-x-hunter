@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Orders;
+use App\Models\User;
+use App\Models\Positions;
 use Illuminate\Http\Request;
+use App\Exports\OrdersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrdersController extends Controller implements CRUDInterface
 {
@@ -12,9 +16,13 @@ class OrdersController extends Controller implements CRUDInterface
     {
         $this->validation($request);
 
-        $orders = Orders::create($request->all());
+        $order = Orders::create($request->only(['user_id', 'address']));
 
-        return response()->json($orders);
+        if ($request->has('positions')) {
+            $order->positions()->sync($request->positions);
+        }
+
+        return response()->json($order);
     }
 
     public function render()
@@ -27,10 +35,13 @@ class OrdersController extends Controller implements CRUDInterface
             $orders = Orders::get();
         }
 
-        $orders = $orders->map();
+        $users = User::limit(10)->get();
+        $positions = Positions::get();
 
         return response()->json([
             'items' => $orders,
+            'users' => $users,
+            'positions' => $positions,
         ]);
     }
 
@@ -38,10 +49,17 @@ class OrdersController extends Controller implements CRUDInterface
     {
         $this->validation($request);
 
-        $position = Orders::find($id);
+        $order = Orders::findOrFail($id);
 
-        $position->update($request->all());
+        $order->update($request->only(['user_id', 'address']));
+
+        if ($request->has('positions')) {
+            $order->positions()->sync($request->positions);
+        }
+
+        return response()->json($order);
     }
+
 
     public function delete($id)
     {
@@ -53,14 +71,22 @@ class OrdersController extends Controller implements CRUDInterface
     public function Validation(Request $request)
     {
         $this->validate($request, [
-            'user_id' => 'required|numeric',
-            'address' => 'required|',
+            'user_id' => 'required|numeric|exists:users,id',
+            'address' => 'required|string|max:255',
+            'positions' => 'sometimes|array',
+            'positions.*' => 'numeric|exists:positions,id'
         ]);
     }
 
 
     public function ExportExcel(Request $request)
     {
-
+        return Excel::download(
+            new OrdersExport(
+                $request->get('dateStart'),
+                $request->get('dateEnd')
+            ),
+            'Заказы.xlsx'
+        );
     }
 }

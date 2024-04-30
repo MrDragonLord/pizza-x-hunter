@@ -3,7 +3,7 @@ import 'sweetalert2/src/sweetalert2.scss'
 import '~/auth'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-import PaginationPlugin from 'vue3-basic-pagination' // import component // register default styles
+import PaginationPlugin from 'vue3-basic-pagination'
 
 import App from './App.vue'
 import router from './router'

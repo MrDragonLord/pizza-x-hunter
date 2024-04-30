@@ -11,10 +11,23 @@ export default defineConfig({
         vitePluginRequire.default(),
     ],
     resolve: {
-        extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
+        extensions: [
+            '.mjs',
+            '.js',
+            '.ts',
+            '.jsx',
+            '.tsx',
+            '.json',
+            '.vue',
+            '.css',
+        ],
         alias: {
             '~': '/resources/js',
             '@img': '/resources/img',
+            'vue-calendar3': path.resolve(
+                __dirname,
+                'node_modules/vue-calendar-3/dist/',
+            ),
         },
     },
 })

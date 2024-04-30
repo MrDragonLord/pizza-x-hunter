@@ -18,7 +18,7 @@
                     v-for="column in state.columns"
                     :key="column.props.field"
                 >
-                    {{ item[column.props.field] }}
+                    {{ getValueByPath(item, column.props.field) }}
                 </div>
                 <div class="table-cell">
                     <button @click="editItem(item)" class="edit">
@@ -81,6 +81,16 @@ onMounted(() => {
         state.columns = slots.default()
     }
 })
+
+function getValueByPath(item, path) {
+    const segments = path.split('.')
+    return segments.reduce((acc, segment) => {
+        if (acc && segment in acc) {
+            return acc[segment]
+        }
+        return undefined
+    }, item)
+}
 
 const editItem = item => {
     emit('editFunction', toRaw(item))
