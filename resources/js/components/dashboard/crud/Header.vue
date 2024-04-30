@@ -2,24 +2,26 @@
     <header>
         <h2>{{ title }}</h2>
         <div class="crud__actions">
-            <button
+            <Button
                 @click="emit('create')"
                 class="btn btn__primary"
                 v-if="showCreate"
             >
                 Создать
-            </button>
-            <button
+            </Button>
+            <Button
                 @click="emit('exportToExcel')"
                 class="btn btn__success"
                 v-if="showExportExcel"
             >
                 Экспорт в Excel
-            </button>
+            </Button>
         </div>
     </header>
 </template>
 <script setup>
+import Button from '~/components/UI/Button.vue'
+
 defineProps({
     title: String,
     showCreate: Boolean,

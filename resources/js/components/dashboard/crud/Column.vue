@@ -2,15 +2,10 @@
     <div class="table-cell">{{ header }}</div>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-    name: 'Column',
-    props: {
-        field: String,
-        header: String,
-    },
+<script setup>
+import { defineProps } from 'vue'
+defineProps({
+    header: String,
 })
 </script>
 

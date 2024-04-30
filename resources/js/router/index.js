@@ -9,15 +9,21 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const userStore = useUserStore()
-    if (to.matched.some(record => record.meta.auth) && userStore.user) {
+    if (to.matched.some(record => record.meta.auth) && !!!userStore.user) {
+        userStore
+            .fetchUser()
+            .then(() => next())
+            .catch(() => next({ name: 'dashboard.login' }))
+    } else if (
+        to.matched.some(record => record.meta.guest) &&
+        !!!userStore.user
+    ) {
         userStore
             .fetchUser()
             .then(() => {
-                next()
+                next({ name: 'dashboard' })
             })
-            .catch(error => {
-                next({ name: 'dashboard.login' })
-            })
+            .catch(() => next())
     } else {
         next()
     }

@@ -1,6 +1,8 @@
 <template>
-    <div>
-        <router-view />
-    </div>
+    <router-view />
 </template>
-<script setup></script>
+<script setup>
+import { useUserStore } from './store/user'
+
+useUserStore().fetchUser()
+</script>

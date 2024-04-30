@@ -2,9 +2,8 @@
     <div class="data-table" :style="tableStyle">
         <div class="table-header">
             <Column
-                v-for="column in columns"
+                v-for="column in state.columns"
                 :key="column.props.field"
-                :field="column.props.field"
                 :header="column.props.header"
             />
             <Column header="Действия" />
@@ -56,7 +55,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, toRaw, toRefs, useSlots } from 'vue'
+import { onMounted, reactive, toRaw, useSlots } from 'vue'
 import Column from './Column'
 
 const slots = useSlots()
@@ -76,7 +75,7 @@ const state = reactive({
 
 onMounted(() => {
     if (slots.default) {
-        state.columns = slots.default().filter(child => child.type === 'Column')
+        state.columns = slots.default()
     }
 })
 

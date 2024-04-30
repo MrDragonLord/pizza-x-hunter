@@ -4,7 +4,7 @@ import api from '~/api'
 export const useUserStore = defineStore('user', {
     state: () => {
         return {
-            user: {},
+            user: null,
             token: null,
         }
     },
@@ -16,9 +16,6 @@ export const useUserStore = defineStore('user', {
             localStorage.setItem('api-token', token)
         },
         async fetchUser() {
-            // if (state.loading) {
-            //     return;
-            // }
             try {
                 const { data } = await api.get('user')
                 this.user = data

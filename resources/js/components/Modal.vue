@@ -1,17 +1,16 @@
 <template>
-    <div v-if="show" class="overlay">
-        <div class="modal">
+    <div v-if="show" class="overlay" @click="emit('close')">
+        <div class="modal" @click.stop>
             <slot />
         </div>
     </div>
 </template>
 
-<script>
-export default {
-    props: {
-        show: Boolean,
-    },
-}
+<script setup>
+defineProps({
+    show: Boolean,
+})
+const emit = defineEmits(['close'])
 </script>
 
 <style>

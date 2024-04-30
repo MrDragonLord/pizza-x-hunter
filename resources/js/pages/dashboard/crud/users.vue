@@ -8,15 +8,17 @@
             @exportToExcel="exportToExcel"
         />
         <DataTable
-            :value="users"
+            :value="items"
             @editFunction="editItem"
             @deleteFunction="deleteItem"
+            v-if="!loading"
         >
             <Column field="name" header="Фамилия Имя" />
             <Column field="phone" header="Телефон" />
             <Column field="role_name" header="Должность" />
         </DataTable>
-        <modal :show="showModal">
+        <Loader v-else />
+        <modal :show="showModal" @close="openModal">
             <div class="modal-header">
                 <h3>Новый сотрудник</h3>
                 <button @click="showModal = !showModal">
@@ -110,24 +112,34 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button
-                    @click="createUser"
+                <Button
+                    @click="() => (editmode ? editUser() : createUser())"
                     class="btn btn__primary btn__create"
+                    :busy="busy"
                 >
                     Добавить нового сотрудника
-                </button>
+                </Button>
             </div>
         </modal>
     </div>
 </template>
 <script setup>
-import DataTable from '~/components/dashboard/crud/DataTable.vue'
-import CrudHeader from '~/components/dashboard/crud/Header'
-import Modal from '~/components/Modal.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import api from '~/api'
 
-const users = ref([])
+import { useUserStore } from '~/store/user'
+import DataTable from '~/components/dashboard/crud/DataTable'
+import Column from '~/components/dashboard/crud/Column'
+import CrudHeader from '~/components/dashboard/crud/Header'
+import Paginate from '~/components/dashboard/crud/Paginate'
+import Modal from '~/components/Modal'
+import Button from '~/components/UI/Button'
+import Loader from '~/components/UI/Loader'
+import Swal from 'sweetalert2'
+
+import { useRoute } from 'vue-router'
+
+const items = ref([])
 const roles = ref([])
 const form = ref({
     name: '',
@@ -136,43 +148,103 @@ const form = ref({
     role_id: 0,
     password: '',
 })
+const busy = ref(false)
+const loading = ref(true)
 const errorsForm = ref([])
 const showModal = ref(false)
+const editMode = ref(false)
+const linkPrefix = 'users'
+const userStore = useUserStore()
+const router = useRoute()
+
+const currentPage = ref(+router.params.page || 1)
 
 const exportToExcel = () => {}
 
 const openModal = () => {
     showModal.value = !showModal.value
+
+    errorsForm.value = []
+    form.value = {}
+    editMode.value = false
 }
 
 const editItem = item => {
     openModal()
+    editMode.value = true
 
-    form.value = item
+    form.value = { ...item }
 }
 
-const deleteItem = item => {}
+const deleteItem = item => {
+    if (userStore.user.id == item.id) {
+        Swal.fire('Вы не можете удалить самого себя!', '', 'error')
+        return
+    }
+    Swal.fire({
+        title: 'Удалить пользователя?',
+        showCancelButton: true,
+        cancelButtonText: 'Отменить',
+    }).then(async result => {
+        if (result.isConfirmed) {
+            await api.delete(`/dashboard/${linkPrefix}/delete/${item.id}`)
 
-const fetchUsers = async () => {
+            Swal.fire('Пользователь удален!', '', 'success')
+
+            await fetchItems()
+        }
+    })
+}
+
+const fetchItems = async () => {
+    loading.value = true
     try {
-        const { data } = await api.get('/dashboard/users/render')
-        users.value = data.users.data
+        const { data } = await api.get(
+            `/dashboard/${linkPrefix}/render?page=${currentPage.value}`,
+        )
+        data.value = data
+        items.value = data.items
         roles.value = data.roles
+        loading.value = false
     } catch (error) {}
 }
 
 const createUser = async () => {
+    busy.value = true
     try {
-        await api.post('/dashboard/users/create', form.value)
-        await fetchUsers()
+        await api.post(`/dashboard/${linkPrefix}/create`, form.value)
+        await fetchItems()
         openModal()
-        form.value = {}
     } catch ({ response }) {
         errorsForm.value = response.data.errors
+    } finally {
+        busy.value = false
+    }
+}
+
+const editUser = async () => {
+    busy.value = true
+    try {
+        await api.post(
+            `/dashboard/${linkPrefix}/update/` + form.value.id,
+            form.value,
+        )
+        await fetchItems()
+        openModal()
+    } catch ({ response }) {
+        errorsForm.value = response.data.errors
+    } finally {
+        busy.value = false
     }
 }
 
 onMounted(async () => {
-    await fetchUsers()
+    await fetchItems()
 })
+watch(
+    () => currentPage.value,
+    async () => {
+        await fetchItems()
+    },
+)
 </script>

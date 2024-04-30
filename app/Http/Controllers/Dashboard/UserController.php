@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Dashboard\CRUDInterface;
 use App\Models\Roles;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller implements CRUDInterface
 {
@@ -24,22 +25,42 @@ class UserController extends Controller implements CRUDInterface
         $search = request()->get('search');
 
         if ($search) {
-            $users = User::where('name', 'LIKE', "%{$search}%")->SimplePaginate(30);
+            $users = User::where('name', 'LIKE', "%{$search}%")->get();
         } else {
-            $users = User::SimplePaginate(30);
+            $users = User::get();
         }
 
         $roles = Roles::get();
 
         return response()->json([
-            'users' => $users,
+            'items' => $users,
             'roles' => $roles,
         ]);
     }
 
     public function update(Request $request, $id)
     {
-        $this->validation($request);
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+        if ($request->has('email') && $request->email != $user->email) {
+            $this->validate($request, [
+                'email' => 'email|unique:users,email',
+            ]);
+        }
+        if ($request->has('phone') && $request->phone != $user->phone) {
+            $this->validate($request, [
+                'phone' => 'unique:users,phone',
+            ]);
+        }
+
+        if (!empty($request->get('password'))) {
+            $user->update($request->all());
+        } else {
+            $user->update($request->except('password'));
+        }
     }
 
     public function delete($id)

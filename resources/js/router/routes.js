@@ -31,7 +31,7 @@ export default [
                 name: 'dashboard',
             },
             {
-                path: 'users',
+                path: 'users/:page?',
                 component: UsersDashboard,
                 name: 'dashboard.users',
             },
@@ -41,5 +41,8 @@ export default [
         path: '/dashboard/login',
         component: LoginDashboard,
         name: 'dashboard.login',
+        meta: {
+            guest: true,
+        },
     },
 ]

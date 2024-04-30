@@ -66,16 +66,6 @@ a {
     border: 1px solid #e5e7eb;
 }
 
-.btn__primary {
-    background-color: #3b82f6;
-    color: #fff;
-}
-
-.btn__success {
-    background-color: #22c55e;
-    color: #fff;
-}
-
 .btn {
     position: relative;
     overflow: hidden;
@@ -83,6 +73,21 @@ a {
     border-radius: 0.5rem;
     padding: 0.5rem;
     font-size: 14px;
+    transition: 0.2s all;
+}
+
+.btn__primary {
+    background-color: #3b82f6;
+    color: #fff;
+}
+
+.btn__primary:hover {
+    background-color: #2563eb;
+}
+
+.btn__success {
+    background-color: #22c55e;
+    color: #fff;
 }
 
 h1 {
@@ -187,4 +192,11 @@ h5 {
 
 .link__router:hover {
     opacity: 0.75;
+}
+
+.paginate {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
 }
