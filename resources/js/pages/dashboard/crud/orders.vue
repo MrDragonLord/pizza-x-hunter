@@ -125,6 +125,21 @@
                         }"
                         class="mt-1 form-control"
                         Timezone="Europe/Ekaterinburg"
+                        :disabledDaysBeforeDayDate="false"
+                        :translations="{
+                            ru: {
+                                days: {
+                                    monday: 'Пн',
+                                    tuesday: 'Вт',
+                                    wednesday: 'Ср',
+                                    thursday: 'Чт',
+                                    friday: 'Пт',
+                                    saturday: 'Сб',
+                                    sunday: 'Вс',
+                                },
+                            },
+                        }"
+                        locale="ru"
                     />
                 </div>
             </div>
@@ -182,21 +197,18 @@ const dateEnd = ref(null)
 
 const currentPage = ref(+router.params.page || 1)
 
-const formatter = new Intl.DateTimeFormat('ru')
+const formatter = new Intl.DateTimeFormat('en')
 
 const exportToExcel = async () => {
     busy.value = true
     try {
-        const { data, headers } = await api.get(
-            `/dashboard/${linkPrefix}/excel`,
-            {
-                responseType: 'blob',
-                params: {
-                    dateStart: formatter.format(dateStart.value),
-                    dateEnd: formatter.format(dateEnd.value),
-                },
+        const { data } = await api.get(`/dashboard/${linkPrefix}/excel`, {
+            responseType: 'blob',
+            params: {
+                dateStart: formatter.format(dateStart.value),
+                dateEnd: formatter.format(dateEnd.value),
             },
-        )
+        })
         const href = window.URL.createObjectURL(data)
 
         const anchorElement = document.createElement('a')
