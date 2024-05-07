@@ -40,7 +40,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
         'password' => 'hashed',
         'role' => 'object'
     ];
@@ -86,5 +86,17 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function userPhoneVerified()
+    {
+        return !is_null($this->phone_verified_at);
+    }
+
+    public function phoneVerifiedAt()
+    {
+        return $this->forceFill([
+            'phone_verified_at' => $this->freshTimestamp(),
+        ])->save();
     }
 }

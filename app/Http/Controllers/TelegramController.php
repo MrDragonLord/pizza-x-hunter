@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Telegram\Bot\Laravel\Facades\Telegram;
+
+class TelegramController extends Controller
+{
+    public function commandHandlerWebHook()
+    {
+        $updates = Telegram::commandsHandler(true);
+
+        $chat_id = $updates->getChat()->getId();
+
+        // Catch Phone Number
+        $user_phone = array_key_exists('contact', $updates['message']) ?
+            $updates['message']['contact']['phone_number'] : null;
+        $text = 'Phone number : ' . $user_phone;
+        if ($user_phone)
+            return Telegram::sendMessage(['chat_id' => $chat_id, 'text' => $text]);
+
+        return 'ok';
+    }
+}
