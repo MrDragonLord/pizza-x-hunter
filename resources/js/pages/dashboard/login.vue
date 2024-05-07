@@ -38,6 +38,7 @@ import { useRouter } from 'vue-router'
 import api from '~/api'
 import Button from '~/components/UI/Button.vue'
 import { useUserStore } from '~/store/user'
+import '@css/dashboard'
 
 const form = ref({
     email: '',

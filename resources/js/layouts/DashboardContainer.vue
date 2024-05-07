@@ -9,12 +9,10 @@
         </div>
     </div>
 </template>
-<script>
+<script setup>
 import sidemenu from '~/components/dashboard/sidemenu'
 import VFooter from '~/components/dashboard/v-footer'
-export default {
-    components: { sidemenu, VFooter },
-}
+import '@css/dashboard'
 </script>
 <style>
 .dashboard {

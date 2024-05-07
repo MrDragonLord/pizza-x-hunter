@@ -6,9 +6,6 @@
 
         <title>{{ env('APP_NAME') }}</title>
         <meta name="csrf-token" content="{{ csrf_token() }}">
-
-        <!-- Styles -->
-        @vite('resources/css/app.css')
     </head>
     <body>
         <div id="app"></div>

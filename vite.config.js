@@ -7,7 +7,7 @@ import path from 'path'
 export default defineConfig({
     plugins: [
         vue(),
-        laravel(['resources/css/app.css', 'resources/js/app.js']),
+        laravel(['resources/js/app.js']),
         vitePluginRequire.default(),
     ],
     resolve: {
@@ -24,6 +24,7 @@ export default defineConfig({
         alias: {
             '~': '/resources/js',
             '@img': '/resources/img',
+            '@css': '/resources/css',
             'vue-calendar3': path.resolve(
                 __dirname,
                 'node_modules/vue-calendar-3/dist/',
