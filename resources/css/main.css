@@ -731,3 +731,11 @@ main section:first-child {
 .btn__not_found {
     margin-top: 15px;
 }
+.link {
+    color: #f59e0b;
+    font-weight: bold;
+}
+
+.link:hover {
+    text-decoration: underline;
+}

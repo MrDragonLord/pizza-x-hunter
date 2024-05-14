@@ -22,7 +22,7 @@
                     </svg>
                 </button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body" v-if="stateRegister">
                 <p class="modal__auth-desc">
                     Подарим подарок на день рождения, сохраним адрес доставки и
                     расскажем об акциях
@@ -40,7 +40,35 @@
                     class="btn btn__yellow btn__auth"
                     :disabled="!phone.completed"
                 >
+                    Войти
+                </button>
+            </div>
+            <div class="modal-body" v-else>
+                <p class="modal__auth-desc">
+                    Подарим подарок на день рождения, сохраним адрес доставки и
+                    расскажем об акциях
+                </p>
+                <input
+                    type="text"
+                    class="form__control"
+                    placeholder="Код подтверждения"
+                    v-maska="code"
+                    data-maska="['###-###']"
+                />
+                <a
+                    :href="`https://t.me/bcryptebot?start=${phone.unmasked}`"
+                    class="link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
                     Перейти в Telegram
+                </a>
+                <button
+                    @click="telegramAuth"
+                    class="btn btn__yellow btn__auth"
+                    :disabled="!code.completed"
+                >
+                    Войти
                 </button>
             </div>
         </modal>
@@ -48,19 +76,21 @@
 </template>
 <script setup>
 import { vMaska } from 'maska'
+import { reactive, ref } from 'vue'
 import Modal from '~/components/Modal'
-import { ref } from 'vue'
 import api from '~/api'
-import { reactive } from 'vue'
 
 const showModal = ref(false)
 const phone = reactive({})
+const code = reactive({})
+const stateRegister = ref(true)
 const phoneMasked = ref('+7 ')
 const errorsForm = ref([])
 
 const openModal = () => {
     showModal.value = !showModal.value
 
+    stateRegister.value = true
     errorsForm.value = []
 }
 
@@ -68,9 +98,9 @@ const telegramAuth = () => {
     try {
         api.post('telegram/login', {
             phone: phone.unmasked,
+            code: code.masked,
         })
-
-        //window.open(`https://t.me/bcryptebot?start=${phone.unmasked}`, '_blank')
+        stateRegister.value = false
     } catch ({ response }) {
         errorsForm.value = response.data.errors
     }
