@@ -127,6 +127,12 @@ header .about__time span {
     color: #fff;
 }
 
+.btn.btn__yellow:disabled {
+    background: rgb(226, 226, 233);
+    color: rgb(171, 173, 186);
+    cursor: not-allowed;
+}
+
 header .category {
     margin-top: 10px;
     display: flex;
@@ -659,10 +665,10 @@ main section:first-child {
 }
 
 .form__control {
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 10px 15px;
     font-size: 14px;
-    border: 1px solid #ced4da;
+    border: 1px solid #f59e0b;
     width: 100%;
     transition: 0.2s all;
 }
@@ -673,8 +679,8 @@ main section:first-child {
 
 .form__control:focus {
     outline: none;
-    box-shadow: 0 0 0 5px rgba(66, 153, 225, 0.5);
-    border-color: #0d6efd;
+    box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.5);
+    border-color: #f59e0b;
 }
 
 .btn__feedback {

@@ -5,7 +5,7 @@
         </a>
         <modal :show="showModal" @close="openModal">
             <div class="modal-header">
-                <h3>Вход на сайт</h3>
+                <h2>Вход на сайт</h2>
                 <button @click="showModal = !showModal">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -22,28 +22,87 @@
                     </svg>
                 </button>
             </div>
+            <div class="modal-body">
+                <p class="modal__auth-desc">
+                    Подарим подарок на день рождения, сохраним адрес доставки и
+                    расскажем об акциях
+                </p>
+                <input
+                    type="text"
+                    class="form__control"
+                    placeholder="Номер мобильного телефона"
+                    v-model="phoneMasked"
+                    v-maska="phone"
+                    data-maska="['+7 (###) ###-##-##']"
+                />
+                <button
+                    @click="telegramAuth"
+                    class="btn btn__yellow btn__auth"
+                    :disabled="!phone.completed"
+                >
+                    Перейти в Telegram
+                </button>
+            </div>
         </modal>
     </div>
 </template>
 <script setup>
+import { vMaska } from 'maska'
 import Modal from '~/components/Modal'
 import { ref } from 'vue'
+import api from '~/api'
+import { reactive } from 'vue'
 
 const showModal = ref(false)
-const form = ref({
-    phone: '',
-})
+const phone = reactive({})
+const phoneMasked = ref('+7 ')
 const errorsForm = ref([])
 
 const openModal = () => {
     showModal.value = !showModal.value
 
     errorsForm.value = []
-    form.value = {}
+}
+
+const telegramAuth = () => {
+    try {
+        api.post('telegram/login', {
+            phone: phone.unmasked,
+        })
+
+        //window.open(`https://t.me/bcryptebot?start=${phone.unmasked}`, '_blank')
+    } catch ({ response }) {
+        errorsForm.value = response.data.errors
+    }
 }
 </script>
 <style>
 .modal {
     max-width: 410px;
+    border-radius: 30px;
+    padding: 30px;
+}
+</style>
+<style scoped>
+.form__control {
+    margin-top: 15px;
+}
+.modal-body {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+.form__control {
+    padding: 17px 20px;
+    font-size: 18px;
+}
+.btn__auth {
+    padding: 13px !important;
+    font-size: 18px;
+}
+.modal__auth-desc {
+    font-weight: 500;
+    color: rgb(92, 99, 112);
+    margin-top: 10px;
 }
 </style>
