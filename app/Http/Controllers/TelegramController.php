@@ -22,4 +22,12 @@ class TelegramController extends Controller
 
         return 'ok';
     }
+
+    public function setWebHook()
+    {
+        $url = env('APP_URL') . env('TELEGRAM_BOT_TOKEN') . '/webhook';
+        $response = Telegram::setWebhook(['url' => $url]);
+
+        return $response == true ? redirect()->back() : dd($response);
+    }
 }

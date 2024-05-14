@@ -7,7 +7,7 @@ use Telegram\Bot\Commands\Command;
 use Telegram;
 
 /**
- * Class VerifyCommand.
+ * Class PhoneNumberCommand.
  */
 class PhoneNumberCommand extends Command
 {
@@ -45,8 +45,7 @@ class PhoneNumberCommand extends Command
             'one_time_keyboard' => true
         ]);
 
-        return $this->telegram->sendMessage([
-            'chat_id' => $chat_id,
+        return $this->replyWithMessage([
             'text' => 'Для оформления заказа необходимо поделиться с нами вашим контактным номером телефона. Для этого нажмите на кнопку ниже',
             'reply_markup' => $keyboard
         ]);

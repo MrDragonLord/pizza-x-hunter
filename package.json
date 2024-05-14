@@ -13,6 +13,7 @@
     "dependencies": {
         "@vitejs/plugin-vue": "^5.0.3",
         "axios": "^1.6.8",
+        "maska": "^2.1.11",
         "pinia": "^2.1.7",
         "sweetalert2": "^11.4.8",
         "swiper": "^11.1.1",
