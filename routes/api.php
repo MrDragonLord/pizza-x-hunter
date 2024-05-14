@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\TelegramAuthController;
 use App\Http\Controllers\Auth\UserController;
 use App\Http\Controllers\LoadController;
 use Illuminate\Support\Facades\Route;
@@ -23,4 +24,8 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 Route::group(['prefix' => 'main'], function () {
     Route::get('positions', [LoadController::class, 'getPositions']);
+});
+
+Route::group(['prefix' => 'telegram'], function () {
+    Route::post('login', [TelegramAuthController::class, 'Login']);
 });

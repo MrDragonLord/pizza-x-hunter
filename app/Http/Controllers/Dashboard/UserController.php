@@ -72,13 +72,19 @@ class UserController extends Controller implements CRUDInterface
 
     public function Validation(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|min:3',
-            'phone' => 'required|unique:users,phone',
-            'email' => 'email|unique:users,email',
-            'password' => 'required|min:3',
-            'role_id' => 'required|integer'
-        ]);
+        $this->validate(
+            $request,
+            [
+                'name' => 'required|min:3',
+                'phone' => 'required|unique:users,phone|regex:/(^[0-9]{10}$)/u',
+                'email' => 'email|unique:users,email',
+                'password' => 'required|min:3',
+                'role_id' => 'required|integer'
+            ],
+            [
+                'phone.regex' => 'Ошибка ввода номера телефона',
+            ]
+        );
     }
 
     public function ExportExcel(Request $request)

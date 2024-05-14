@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\VerificatedTask;
 use Illuminate\Http\Request;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -16,9 +18,16 @@ class TelegramController extends Controller
         // Catch Phone Number
         $user_phone = array_key_exists('contact', $updates['message']) ?
             $updates['message']['contact']['phone_number'] : null;
-        $text = 'Phone number : ' . $user_phone;
-        if ($user_phone)
-            return Telegram::sendMessage(['chat_id' => $chat_id, 'text' => $text]);
+
+        if ($user_phone) {
+            if ($user = $this->setUserVerify($user_phone, $chat_id)) {
+
+                $text = 'Подтверждено успешно, ждём Вас в приложении!';
+                Telegram::sendMessage(['chat_id' => $chat_id, 'text' => $text]);
+
+                return VerificatedTask::createTask($user);
+            }
+        }
 
         return 'ok';
     }
@@ -29,5 +38,18 @@ class TelegramController extends Controller
         $response = Telegram::setWebhook(['url' => $url]);
 
         return $response == true ? redirect()->back() : dd($response);
+    }
+
+    public function setUserVerify(string $phone, $chatId)
+    {
+        $user = User::where('phone', $phone)->first();
+        if (isset($user)) {
+            $phone = substr($phone, 1);
+
+            $user->phoneVerifiedAt();
+            $user->telegram_id = $chatId;
+            return $user;
+        }
+        return false;
     }
 }
