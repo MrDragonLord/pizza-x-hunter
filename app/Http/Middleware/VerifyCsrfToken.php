@@ -12,6 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        env('TELEGRAM_BOT_TOKEN') . '/webhook'
+        '*/webhook'
     ];
 }
