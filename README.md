@@ -48,7 +48,19 @@
     php artisan db:seed
     ```
 
-### 2. Запуск проекта
+### 2. Установка зависимостей
+
+1. Зависимости PHP
+    ```sh
+    composer install
+    ```
+
+2. Зависимости JavaScript
+    ```sh
+    npm install
+    ```
+
+### 3. Запуск проекта
 
 1. Сборка JavaScript
     ```sh
@@ -58,6 +70,11 @@
 2. Запустите сервер разработки Laravel:
     ```sh
     php artisan serve
+    ```
+### 4. Запуск Telegram бота
+1. Необходимо перейти по ссылке, важно, необходимо наличие SSL сертификата
+    ```url
+    https://example.ru/set-hook
     ```
 
 Теперь проект Pizza x Hunter готов к использованию!
