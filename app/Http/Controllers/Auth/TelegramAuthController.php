@@ -8,7 +8,6 @@ use App\Models\VerificatedTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Validation\ValidationException;
-use Telegram\Bot\Laravel\Facades\Telegram;
 
 class TelegramAuthController extends Controller
 {
@@ -30,8 +29,8 @@ class TelegramAuthController extends Controller
     {
         $request->validate(
             [
-                'phone' => 'required|string|regex:/(^[0-9]{10}$)/u',
-                'code' => 'string|regex:/(^[0-9]{3}-[0-9]{3}$)/u',
+                'phone' => 'required|string|regex:/^[0-9]{10}$/u',
+                'code' => 'string|regex:/^[0-9]{3}-[0-9]{3}$/u',
             ],
             [
                 'phone.regex' => 'Ошибка ввода номера телефона',
@@ -83,7 +82,7 @@ class TelegramAuthController extends Controller
 
     protected function createUser(Request $request)
     {
-        User::create([
+        return User::create([
             'phone' => $request->get('phone'),
             'role_id' => 0
         ]);

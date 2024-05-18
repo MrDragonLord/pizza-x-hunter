@@ -41,6 +41,21 @@
                 </button>
             </div>
             <div class="modal-body">
+                <div>
+                    <h5>Картинка позиции</h5>
+                    <input
+                        type="file"
+                        style="display: none"
+                        @change="uploadImg"
+                        id="uploadImg"
+                    />
+                    <div class="form-file">
+                        <img :src="uploadImgUrl" />
+                        <label for="uploadImg" class="btn btn__primary">
+                            Загрузить
+                        </label>
+                    </div>
+                </div>
                 <div class="form-input">
                     <h5>Название</h5>
                     <input
@@ -146,6 +161,7 @@ const form = ref({
     discount: 0,
 })
 const errorsForm = ref([])
+const uploadImgUrl = ref()
 
 const busy = ref(false)
 const loading = ref(true)
@@ -172,6 +188,7 @@ const editItem = item => {
     editMode.value = true
 
     form.value = { ...item }
+    uploadImgUrl.value = form.value.img
 }
 
 const deleteItem = item => {
@@ -205,7 +222,17 @@ const fetchItems = async () => {
 const createItem = async () => {
     busy.value = true
     try {
-        await api.post(`/dashboard/${linkPrefix}/create`, form.value)
+        const formData = new FormData()
+        formData.append('image', document.getElementById('uploadImg').files[0])
+        if (form.value.name) formData.append('name', form.value.name)
+        if (form.value.description)
+            formData.append('description', form.value.description)
+        if (form.value.price) formData.append('price', form.value.price)
+        if (form.value.weight) formData.append('weight', form.value.weight)
+        if (form.value.discount != null)
+            formData.append('discount', form.value.discount)
+
+        await api.post(`/dashboard/${linkPrefix}/create`, formData)
         await fetchItems()
         openModal()
     } catch ({ response }) {
@@ -218,9 +245,19 @@ const createItem = async () => {
 const editItemClick = async () => {
     busy.value = true
     try {
+        const formData = new FormData()
+        formData.append('image', document.getElementById('uploadImg').files[0])
+        if (form.value.name) formData.append('name', form.value.name)
+        if (form.value.description)
+            formData.append('description', form.value.description)
+        if (form.value.price) formData.append('price', form.value.price)
+        if (form.value.weight) formData.append('weight', form.value.weight)
+        if (form.value.discount != null)
+            formData.append('discount', form.value.discount)
+
         await api.post(
             `/dashboard/${linkPrefix}/update/` + form.value.id,
-            form.value,
+            formData,
         )
         await fetchItems()
         openModal()
@@ -229,6 +266,10 @@ const editItemClick = async () => {
     } finally {
         busy.value = false
     }
+}
+
+const uploadImg = ({ target }) => {
+    uploadImgUrl.value = URL.createObjectURL(target.files[0])
 }
 
 onMounted(async () => {

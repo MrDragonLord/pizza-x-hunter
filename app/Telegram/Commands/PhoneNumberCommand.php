@@ -31,9 +31,6 @@ class PhoneNumberCommand extends Command
      */
     public function handle()
     {
-        $response = $this->getUpdate();
-        $chat_id = $response->getChat()->getId();
-
         $btn = Keyboard::button([
             'text' => 'Поделиться контактом',
             'request_contact' => true,

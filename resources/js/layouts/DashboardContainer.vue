@@ -1,6 +1,7 @@
 <template>
     <div class="dashboard">
-        <sidemenu />
+        <DesktopSidebar />
+        <MobileSidebar />
         <div class="dashboard__content container">
             <main class="dashboard__content">
                 <router-view />
@@ -10,7 +11,8 @@
     </div>
 </template>
 <script setup>
-import sidemenu from '~/components/dashboard/sidemenu'
+import DesktopSidebar from '~/components/dashboard/DesktopSidebar'
+import MobileSidebar from '~/components/dashboard/MobileSidebar'
 import VFooter from '~/components/dashboard/v-footer'
 import '@css/dashboard'
 </script>
@@ -18,6 +20,12 @@ import '@css/dashboard'
 .dashboard {
     display: flex;
     height: 100vh;
+}
+
+@media (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+    }
 }
 .dashboard__content {
     display: flex;

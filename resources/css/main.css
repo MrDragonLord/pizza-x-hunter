@@ -73,6 +73,7 @@ ul {
 @media screen and (max-width: 1280px) {
     .container {
         max-width: 1024px;
+        padding: 0 10px;
     }
 }
 
@@ -146,7 +147,6 @@ header .category a {
 header .swiper-wrapper {
     margin-top: 59px;
     display: flex;
-    gap: 20px;
 }
 
 header .btn__icon {
@@ -265,10 +265,6 @@ header .btn__icon {
     display: none;
 }
 
-.swiper-slide {
-    margin-right: 0px !important;
-}
-
 header .swiper-wrapper .swiper-slide {
     border: 5px solid #f59e0b;
     border-radius: 24px;
@@ -294,29 +290,50 @@ header .btn__arrow {
     right: -45px;
 }
 
-header .stories__img {
+header .stories__img img {
     border-radius: 19.5px;
-    height: 241px;
+    height: 241px !important;
     width: 97%;
     overflow: hidden;
 }
 
-header .swiper-wrapper div img {
-    height: 100%;
-    width: 100%;
+header .stories__img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-@media screen and (max-width: 1280px) {
-    header .swiper-wrapper {
-        gap: 10px;
-    }
+header .swiper-wrapper div img {
+    width: 97%;
+}
 
+@media screen and (max-width: 720px) {
     header .swiper-wrapper div {
-        height: 121px;
+        height: 122px !important;
     }
 
     header .stories__img {
-        height: 104px;
+        height: 104px !important;
+    }
+
+    header .stories__img img {
+        height: 106px !important;
+        border-radius: 19.5px;
+    }
+
+    header .swiper-wrapper div img {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 720px) {
+    header .swiper-wrapper div {
+        height: 194px;
+    }
+
+    header .stories__img img {
+        height: 180px;
+        border-radius: 19.5px;
     }
 }
 
@@ -328,7 +345,11 @@ header .swiper-wrapper div img {
 
 @media screen and (max-width: 1280px) {
     #positions {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    header .btn__arrow {
+        display: none !important;
     }
 }
 
@@ -683,6 +704,11 @@ main section:first-child {
     border-color: #f59e0b;
 }
 
+.form__error {
+    color: rgb(248, 113, 113);
+    font-size: 16px;
+}
+
 .btn__feedback {
     height: 40px;
 }
@@ -734,8 +760,25 @@ main section:first-child {
 .link {
     color: #f59e0b;
     font-weight: bold;
+    background-color: transparent;
 }
 
 .link:hover {
     text-decoration: underline;
+}
+
+.user__profile {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.user__profile-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user__profile-name img {
+    width: 30px;
 }

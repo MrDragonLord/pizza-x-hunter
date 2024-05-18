@@ -18,6 +18,7 @@
                     v-for="column in state.columns"
                     :key="column.props.field"
                 >
+                    <b class="table-row-name">{{ column.props.header }}: </b>
                     {{ getValueByPath(item, column.props.field) }}
                 </div>
                 <div class="table-cell">
@@ -154,5 +155,22 @@ const deleteItem = item => {
     padding: 20px;
     text-align: center;
     color: #64748b;
+}
+
+.table-row-name {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .table-header {
+        display: none;
+    }
+    .table-row {
+        flex-direction: column;
+    }
+
+    .table-row-name {
+        display: contents;
+    }
 }
 </style>

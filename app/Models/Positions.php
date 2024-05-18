@@ -25,7 +25,7 @@ class Positions extends Model
     public function getImgAttribute()
     {
         $appUrl = env('APP_URL');
-        return "$appUrl/uploads/positions/$this->id";
+        return "$appUrl/uploads/positions/$this->id.webp";
     }
 
 }

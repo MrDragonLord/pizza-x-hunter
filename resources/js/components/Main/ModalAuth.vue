@@ -35,6 +35,12 @@
                     v-maska="phone"
                     data-maska="['+7 (###) ###-##-##']"
                 />
+                <span
+                    class="form__error"
+                    v-if="errorsForm.hasOwnProperty('phone')"
+                >
+                    {{ errorsForm.phone[0] }}
+                </span>
                 <button
                     @click="telegramAuth"
                     class="btn btn__yellow btn__auth"
@@ -55,6 +61,12 @@
                     v-maska="code"
                     data-maska="['###-###']"
                 />
+                <span
+                    class="form__error"
+                    v-if="errorsForm.hasOwnProperty('code')"
+                >
+                    {{ errorsForm.code[0] }}
+                </span>
                 <a
                     :href="`https://t.me/bcryptebot?start=${phone.unmasked}`"
                     class="link"
@@ -79,6 +91,7 @@ import { vMaska } from 'maska'
 import { reactive, ref } from 'vue'
 import Modal from '~/components/Modal'
 import api from '~/api'
+import { useRoute, useRouter } from 'vue-router'
 
 const showModal = ref(false)
 const phone = reactive({})
@@ -87,6 +100,9 @@ const stateRegister = ref(true)
 const phoneMasked = ref('+7 ')
 const errorsForm = ref([])
 
+const { next } = useRouter()
+const route = useRoute()
+
 const openModal = () => {
     showModal.value = !showModal.value
 
@@ -94,13 +110,22 @@ const openModal = () => {
     errorsForm.value = []
 }
 
-const telegramAuth = () => {
+const telegramAuth = async () => {
     try {
-        api.post('telegram/login', {
+        const { data } = await api.post('telegram/login', {
             phone: phone.unmasked,
             code: code.masked,
         })
-        stateRegister.value = false
+        if (data.token) {
+            stateRegister.value = false
+
+            userStore.saveToken(data.token)
+            await userStore.fetchUser()
+
+            if (route.name != 'index') {
+                next({ name: 'index' })
+            }
+        }
     } catch ({ response }) {
         errorsForm.value = response.data.errors
     }

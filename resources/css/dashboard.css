@@ -127,11 +127,15 @@ h5 {
 
 .container {
     margin: 0 auto;
+    padding-right: 10px !important;
+    padding-left: 10px !important;
 }
 
 @media (min-width: 640px) {
     .container {
         max-width: 640px;
+        padding-right: 0;
+        padding-left: 0;
     }
 }
 @media (min-width: 768px) {
@@ -170,6 +174,20 @@ h5 {
     flex-direction: column;
     gap: 5px;
 }
+
+.form-file {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.form-file img {
+    width: 200px;
+    height: 150px;
+    background-color: #5f5757;
+}
+
 .btn__create {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -213,4 +231,63 @@ h5 {
 .vue-calendar .calendar_input {
     padding-left: 0 !important;
     padding-right: 0 !important;
+}
+
+.dashboard__logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.aside__link {
+    position: relative;
+    padding: 0.75rem 1.5rem;
+}
+
+.aside__link a {
+    font-weight: 700;
+    font-size: 0.875rem;
+}
+
+.aside__link:hover,
+.aside__link .active__link {
+    opacity: 0.75;
+}
+
+.aside__links {
+    margin-top: 1.5rem;
+}
+
+.aside__link_active {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    border-bottom-right-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    background-color: rgb(37, 99, 235);
+    width: 0.25rem;
+}
+
+.aside__profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0.75rem 1.5rem;
+    margin-top: auto;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.aside__profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 99999px;
+}
+
+.aside__profile .aside__name {
+    font-size: 16px;
+}
+
+.aside__logout {
+    padding: 0.75rem 1.5rem;
 }

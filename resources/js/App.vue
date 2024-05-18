@@ -4,5 +4,7 @@
 <script setup>
 import { useUserStore } from './store/user'
 
-useUserStore().fetchUser()
+const token = localStorage.getItem('api-token')
+
+if (token) useUserStore().fetchUser()
 </script>

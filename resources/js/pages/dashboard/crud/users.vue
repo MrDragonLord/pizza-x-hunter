@@ -75,8 +75,10 @@
                     <h5>Телефон</h5>
                     <input
                         class="mt-1 form-control"
-                        placeholder="Название"
+                        placeholder="Номер мобильного телефона"
                         v-model="form.phone"
+                        v-maska="phoneMasked"
+                        data-maska="['+7 (###) ###-##-##']"
                     />
                     <span
                         class="form-error"
@@ -99,8 +101,9 @@
                     <span
                         class="form-error"
                         v-if="errorsForm.hasOwnProperty('role_id')"
-                        >{{ errorsForm.role_id[0] }}</span
                     >
+                        {{ errorsForm.role_id[0] }}
+                    </span>
                 </div>
                 <div class="form-input">
                     <h5>Пароль</h5>
@@ -134,7 +137,8 @@
     </div>
 </template>
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { vMaska } from 'maska'
+import { ref, onMounted, watch, reactive } from 'vue'
 import api from '~/api'
 
 import { useUserStore } from '~/store/user'
@@ -150,19 +154,23 @@ import { useRoute } from 'vue-router'
 
 const items = ref([])
 const roles = ref([])
-const form = ref({
+
+const defaultValueForm = ref({
     name: '',
     email: '',
-    phone: '',
+    phone: '+7 ',
     role_id: 0,
     password: '',
 })
+
+const form = ref(defaultValueForm.value)
 const errorsForm = ref([])
 
 const busy = ref(false)
 const loading = ref(true)
 const showModal = ref(false)
 const editMode = ref(false)
+const phoneMasked = reactive({})
 
 const linkPrefix = 'users'
 
@@ -177,7 +185,7 @@ const openModal = () => {
     showModal.value = !showModal.value
 
     errorsForm.value = []
-    form.value = {}
+    form.value = defaultValueForm.value
     editMode.value = false
 }
 
@@ -224,7 +232,10 @@ const fetchItems = async () => {
 const createUser = async () => {
     busy.value = true
     try {
-        await api.post(`/dashboard/${linkPrefix}/create`, form.value)
+        await api.post(`/dashboard/${linkPrefix}/create`, {
+            ...form.value,
+            phone: phoneMasked.unmasked,
+        })
         await fetchItems()
         openModal()
     } catch ({ response }) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Positions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PositionsController extends Controller implements CRUDInterface
 {
@@ -12,7 +13,15 @@ class PositionsController extends Controller implements CRUDInterface
     {
         $this->validation($request);
 
-        $position = Positions::create($request->all());
+        $position = Positions::create([
+            'name' => $request->input('name'),
+            'price' => $request->input('price'),
+            'description' => $request->input('description'),
+            'weight' => $request->input('weight'),
+            'discount' => $request->input('discount'),
+        ]);
+        $image = $request->file('image');
+        Storage::disk('public_uploads')->putFileAs('/positions', $image, "$position->id.webp");
 
         return response()->json($position);
     }
@@ -38,7 +47,21 @@ class PositionsController extends Controller implements CRUDInterface
 
         $position = Positions::find($id);
 
-        $position->update($request->all());
+        if ($image = $request->file('image')) {
+            Storage::disk('public_uploads')->putFileAs('/positions', $image, "$position->id.webp");
+
+
+            $position->update([
+                'name' => $request->input('name'),
+                'price' => $request->input('price'),
+                'description' => $request->input('description'),
+                'weight' => $request->input('weight'),
+                'discount' => $request->input('discount'),
+            ]);
+        } else {
+            $position->update($request->all());
+        }
+
     }
 
     public function delete($id)
@@ -51,6 +74,7 @@ class PositionsController extends Controller implements CRUDInterface
     public function Validation(Request $request)
     {
         $this->validate($request, [
+            'image' => 'image|mimes:webp',
             'name' => 'required|min:3',
             'price' => 'required|numeric|min:1',
             'weight' => 'required|numeric|min:1',

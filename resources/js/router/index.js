@@ -7,7 +7,7 @@ const router = createRouter({
     routes,
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
     const userStore = useUserStore()
     if (to.matched.some(record => record.meta.auth) && !!!userStore.user) {
         userStore

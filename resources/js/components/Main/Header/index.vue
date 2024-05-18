@@ -9,7 +9,8 @@
                     Доставка <span>пиццы <br />45</span> минут
                 </div>
             </div>
-            <ModalAuth />
+            <ModalAuth v-if="!user" />
+            <UserProfile v-else />
             <a href="#" class="btn btn__icon">
                 <img src="@img/icons/align-justify.svg" alt="Menu" />
             </a>
@@ -28,6 +29,8 @@
 <script setup>
 import Stories from '~/components/Main/Header/Stories'
 import ModalAuth from '~/components/Main/ModalAuth'
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import 'swiper/scss'
+import UserProfile from '~/components/Main/Header/UserProfile'
+import { useUserStore } from '~/store/user'
+
+const { user } = useUserStore()
 </script>
