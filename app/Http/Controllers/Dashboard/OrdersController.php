@@ -27,13 +27,9 @@ class OrdersController extends Controller implements CRUDInterface
 
     public function render()
     {
-        $search = request()->get('search');
+        $orders = Orders::paginate(10);
 
-        if ($search) {
-            $orders = Orders::where('address', 'LIKE', "%{$search}%")->get();
-        } else {
-            $orders = Orders::get();
-        }
+        $orders = Orders::transformCollection($orders);
 
         $users = User::limit(10)->get();
         $positions = Positions::get();

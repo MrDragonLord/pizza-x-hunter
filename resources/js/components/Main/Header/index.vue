@@ -23,7 +23,7 @@
             <li><a href="#">Соусы</a></li>
             <li><a href="#">Акции</a></li>
         </ul>
-        <Stories />
+        <!-- <Stories /> -->
     </header>
 </template>
 <script setup>

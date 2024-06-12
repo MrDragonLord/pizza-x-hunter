@@ -43,4 +43,22 @@ class Orders extends Model
     {
         return $this->positions()->get();
     }
+
+    public static function transformCollection($orders)
+    {
+        $orders->getCollection()->transform(function ($order) {
+            $positionIds = $order->positions->pluck('id')->toArray();
+            $newOrder = new \stdClass();
+            $newOrder->id = $order->id;
+            $newOrder->user_id = $order->user_id;
+            $newOrder->address = $order->address;
+            $newOrder->created_at = $order->created_at->format('H:i d.m.Y');
+            $newOrder->user = $order->user;
+            $newOrder->positions = $positionIds;
+
+            return $newOrder;
+        });
+
+        return $orders;
+    }
 }

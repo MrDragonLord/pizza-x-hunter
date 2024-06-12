@@ -22,13 +22,7 @@ class UserController extends Controller implements CRUDInterface
 
     public function render()
     {
-        $search = request()->get('search');
-
-        if ($search) {
-            $users = User::where('name', 'LIKE', "%{$search}%")->get();
-        } else {
-            $users = User::get();
-        }
+        $users = User::paginate(10);
 
         $roles = Roles::get();
 

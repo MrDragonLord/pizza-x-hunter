@@ -28,13 +28,7 @@ class PositionsController extends Controller implements CRUDInterface
 
     public function render()
     {
-        $search = request()->get('search');
-
-        if ($search) {
-            $positions = Positions::where('name', 'LIKE', "%{$search}%")->get();
-        } else {
-            $positions = Positions::get();
-        }
+        $positions = Positions::paginate(10);
 
         return response()->json([
             'items' => $positions,

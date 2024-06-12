@@ -9,17 +9,17 @@ class RolesSeeder extends Seeder
 {
     protected $roles = [
         [
-            'id' => 0,
+            'id' => 1,
             'name' => 'Не сотрудник',
             'slug' => 'user',
         ],
         [
-            'id' => 1,
+            'id' => 2,
             'name' => 'Администратор',
             'slug' => 'admin',
         ],
         [
-            'id' => 2,
+            'id' => 3,
             'name' => 'Менеджер',
             'slug' => 'manager',
         ],

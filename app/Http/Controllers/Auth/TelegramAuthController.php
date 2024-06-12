@@ -84,7 +84,7 @@ class TelegramAuthController extends Controller
     {
         return User::create([
             'phone' => $request->get('phone'),
-            'role_id' => 0
+            'role_id' => 1
         ]);
     }
 

@@ -222,8 +222,7 @@ const fetchItems = async () => {
         const { data } = await api.get(
             `/dashboard/${linkPrefix}/render?page=${currentPage.value}`,
         )
-        data.value = data
-        items.value = data.items
+        items.value = data.items.data
         roles.value = data.roles
         loading.value = false
     } catch (error) {}
@@ -248,10 +247,10 @@ const createUser = async () => {
 const editUser = async () => {
     busy.value = true
     try {
-        await api.post(
-            `/dashboard/${linkPrefix}/update/` + form.value.id,
-            form.value,
-        )
+        await api.post(`/dashboard/${linkPrefix}/update/` + form.value.id, {
+            ...form.value,
+            phone: phoneMasked.unmasked,
+        })
         await fetchItems()
         openModal()
     } catch ({ response }) {

@@ -213,8 +213,7 @@ const fetchItems = async () => {
         const { data } = await api.get(
             `/dashboard/${linkPrefix}/render?page=${currentPage.value}`,
         )
-        data.value = data
-        items.value = data.items
+        items.value = data.items.data
         loading.value = false
     } catch (error) {}
 }
